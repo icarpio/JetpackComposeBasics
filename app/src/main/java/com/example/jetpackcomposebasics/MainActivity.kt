@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 window.statusBarColor = MaterialTheme.colorScheme.primary.toArgb() // Cambiar el color de la barra de estado
                 Scaffold(modifier = Modifier.fillMaxSize(),
                 ) {
-                    //myRow()
+
                 }
             }
         }
@@ -62,7 +62,7 @@ fun MyBox(name: String) {
 
 //@Preview(showBackground = true)
 @Composable
-fun myColumn(){
+fun MyColumn(){
     Column(
         Modifier
             .fillMaxSize()
@@ -112,7 +112,7 @@ fun myColumn(){
 
 @Preview(showBackground = true)
 @Composable
-fun myRow(){
+fun MyRow(){
     Row(
         Modifier
             .fillMaxSize()
