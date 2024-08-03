@@ -153,7 +153,7 @@ fun MyComplexLayout() {
                 .background(Color.Red), contentAlignment = Alignment.TopCenter){
             Text(text = "Texto 1")
         }
-        mySpacer(size = 30)
+        MySpacer(size = 30)
         Row(
             Modifier
                 .fillMaxWidth()
@@ -173,7 +173,7 @@ fun MyComplexLayout() {
                 Text(text = "Texto 3")
             }
         }
-        mySpacer(size = 30)
+        MySpacer(size = 30)
         Box(
             Modifier
                 .fillMaxWidth()
@@ -185,6 +185,6 @@ fun MyComplexLayout() {
 }
 
 @Composable
-fun mySpacer(size:Int){
+fun MySpacer(size:Int){
     Spacer(modifier = Modifier.height(size.dp))
 }
