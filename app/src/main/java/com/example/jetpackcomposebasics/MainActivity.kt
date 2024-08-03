@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -110,7 +112,7 @@ fun MyColumn(){
     }
 }
 
-@Preview(showBackground = true)
+
 @Composable
 fun MyRow(){
     Row(
@@ -134,8 +136,55 @@ fun MyRow(){
                 .background(Color.Cyan)
                 .width(100.dp))
         Text(text = "Ejemplo4",
-        Modifier
-            .background(Color.Magenta)
-            .width(100.dp))
+            Modifier
+                .background(Color.Magenta)
+                .width(100.dp))
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MyComplexLayout() {
+    Column(Modifier.fillMaxSize()) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(Color.Red), contentAlignment = Alignment.TopCenter){
+            Text(text = "Texto 1")
+        }
+        mySpacer(size = 30)
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .weight(1f)){
+            Box(
+                Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .background(Color.Green), contentAlignment = Alignment.Center){
+                Text(text = "Texto 2")
+            }
+            Box(
+                Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .background(Color.Magenta), contentAlignment = Alignment.Center){
+                Text(text = "Texto 3")
+            }
+        }
+        mySpacer(size = 30)
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(Color.Yellow), contentAlignment = Alignment.BottomCenter){
+            Text(text = "Texto 4")
+        }
+    }
+}
+
+@Composable
+fun mySpacer(size:Int){
+    Spacer(modifier = Modifier.height(size.dp))
 }
