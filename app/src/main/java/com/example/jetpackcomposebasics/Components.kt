@@ -24,7 +24,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -33,6 +35,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -417,4 +420,55 @@ fun MyImageCircle(){
             .border(30.dp, Color.Red, CircleShape),
         contentScale = ContentScale.Crop
     )
+}
+
+@Composable
+fun MyProgressBar(){
+    var showLoading by rememberSaveable { mutableStateOf(false) }
+    Column(
+        Modifier
+            .padding(24.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if(showLoading) {
+            CircularProgressIndicator(color = Color.Red)
+            LinearProgressIndicator(Modifier.padding(top = 32.dp), color = Color.Red, trackColor = Color.Yellow)
+        }
+        Button(onClick = { showLoading = !showLoading}) {
+            Text(text = "Load")
+        }
+
+    }
+}
+@Composable
+fun MyProgressBarAd(){
+    var progressStatus by rememberSaveable { mutableFloatStateOf(0f) }
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(color = Color.Red, progress = progressStatus)
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp), // Agrega padding para mayor estética
+            horizontalArrangement = Arrangement.Center, // Centra los botones horizontalmente
+            verticalAlignment = Alignment.CenterVertically // Opcional: centrar verticalmente si es necesario
+        ) {
+            Button(onClick = { progressStatus += 0.1f }) {
+                Text(text = "Incrementar")
+            }
+            Button(
+                onClick = { progressStatus -= 0.1f },
+                modifier = Modifier.padding(start = 8.dp) // Agrega espacio entre los botones
+            ) {
+                Text(text = "Reducir")
+            }
+        }
+        //LinearProgressIndicator(Modifier.padding(top = 32.dp), color = Color.Red, trackColor = Color.Yellow)
+    }
 }

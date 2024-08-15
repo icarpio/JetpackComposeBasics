@@ -1,28 +1,24 @@
 package com.example.jetpackcomposebasics
+
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Call
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,13 +28,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jetpackcomposebasics.ui.theme.JetpackComposeBasicsTheme
 
@@ -50,68 +41,106 @@ class MainActivity : ComponentActivity() {
         setContent {
             JetpackComposeBasicsTheme {
                 //window.statusBarColor = Color.Magenta.toArgb()
-                window.statusBarColor = MaterialTheme.colorScheme.primary.toArgb() // Cambiar el color de la barra de estado
+                window.statusBarColor =
+                    MaterialTheme.colorScheme.primary.toArgb() // Cambiar el color de la barra de estado
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     //var myTextParams by remember { mutableStateOf("") }
                     //MyTextWithParameters(myTextParams) { myTextParams = it }
-                    MyProgressBarAd()
+                    val myOptions = getOptions(listOf("Option 1","Option 2","Option 3"))
+                    Column() {
+                        myOptions.forEach{
+                            MyCheckBoxWithTextCompleted(it)
+                        }
+                    }
                 }
             }
         }
     }
 }
 
+@Composable
+fun getOptions(titles:List<String>): List<CheckInfo> {
+    return titles.map {
+        var status by rememberSaveable { mutableStateOf(false) }
+        CheckInfo(
+            title = it,
+            selected = status,
+            onCheckedChange = {newStatus -> status = newStatus}
+        )
+    }
+}
 
 
 @Composable
-fun MyProgressBar(){
-    var showLoading by rememberSaveable { mutableStateOf(false) }
-    Column(
-        Modifier
-            .padding(24.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if(showLoading) {
-            CircularProgressIndicator(color = Color.Red)
-            LinearProgressIndicator(Modifier.padding(top = 32.dp), color = Color.Red, trackColor = Color.Yellow)
-        }
-        Button(onClick = { showLoading = !showLoading}) {
-            Text(text = "Load")
-        }
+fun MySwich() {
+    var state by rememberSaveable { mutableStateOf(true) }
+    Switch(
+        checked = state,
+        onCheckedChange = { state = !state },
+        enabled = true,
+        colors = SwitchDefaults.colors(
+            checkedThumbColor = Color.Green, // Color del pulgar cuando está marcado
+            uncheckedThumbColor = Color.Red,  // Color del pulgar cuando no está marcado
+            checkedTrackColor = Color.Blue,  // Color de la pista cuando está marcado
+            uncheckedTrackColor = Color.Gray,  // Color de la pista cuando no está marcado
 
-    }
+
+        ))
 }
+
+
 @Composable
-fun MyProgressBarAd(){
-    var progressStatus by rememberSaveable { mutableFloatStateOf(0f) }
-    Column(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator(color = Color.Red, progress = progressStatus)
+fun MyCheckBoxBasic() {
+    var state by rememberSaveable { mutableStateOf(true) }
+    Checkbox(
+        checked = state,
+        onCheckedChange = {state = !state},
+        enabled = true,
+        colors = CheckboxDefaults.colors(
+            checkedColor = Color.Red,
+            uncheckedColor = Color.Yellow,
+            checkmarkColor = Color.Green
+        ))
+}
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp), // Agrega padding para mayor estética
-            horizontalArrangement = Arrangement.Center, // Centra los botones horizontalmente
-            verticalAlignment = Alignment.CenterVertically // Opcional: centrar verticalmente si es necesario
-        ) {
-            Button(onClick = { progressStatus += 0.1f }) {
-                Text(text = "Incrementar")
-            }
-            Button(
-                onClick = { progressStatus -= 0.1f },
-                modifier = Modifier.padding(start = 8.dp) // Agrega espacio entre los botones
-            ) {
-                Text(text = "Reducir")
-            }
-        }
-        //LinearProgressIndicator(Modifier.padding(top = 32.dp), color = Color.Red, trackColor = Color.Yellow)
+
+
+@Composable
+fun MyCheckBoxWithText() {
+    var state by rememberSaveable { mutableStateOf(true) }
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(), // Opcional: Para que el Row ocupe todo el ancho disponible
+        verticalAlignment = Alignment.CenterVertically // Alinea verticalmente al centro
+    ) {
+        Checkbox(
+            checked = state,
+            onCheckedChange = { state = it }
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = "Texto 1")
     }
 }
+
+@Composable
+fun MyCheckBoxWithTextCompleted(checkInfo: CheckInfo) {
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(), // Opcional: Para que el Row ocupe todo el ancho disponible
+        verticalAlignment = Alignment.CenterVertically // Alinea el Checkbox y el Text verticalmente en el centro
+    ) {
+        Checkbox(
+            checked = checkInfo.selected,
+            onCheckedChange = { checkInfo.onCheckedChange(it) } // Cambiar al nuevo valor de estado
+        )
+        Spacer(modifier = Modifier.width(8.dp)) // Espacio entre Checkbox y Text
+        Text(text = checkInfo.title)
+    }
+}
+
+
+
