@@ -24,15 +24,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -48,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -301,6 +309,9 @@ fun MyText() {
     }
 }
 
+
+//var myTextParams by remember { mutableStateOf("") }
+//MyTextWithParameters(myTextParams) { myTextParams = it }
 @Composable
 fun MyTextWithParameters(name:String, onValueChanged:(String) -> Unit) {
     TextField(value = name, onValueChange = {onValueChanged(it)})
@@ -472,3 +483,148 @@ fun MyProgressBarAd(){
         //LinearProgressIndicator(Modifier.padding(top = 32.dp), color = Color.Red, trackColor = Color.Yellow)
     }
 }
+
+//var selectRadioButton by remember { mutableStateOf("Option") }
+//MyRadioButtonList(selectRadioBut ton) { selectRadioButton = it }
+@Composable
+fun MyRadioButtonList(name:String, onItemSelected:(String)->Unit) {
+    Column(Modifier.fillMaxWidth().padding(9.dp)) {
+        Row {
+            RadioButton(selected = name == "List - Option 1", onClick = {onItemSelected("List - Option 1")})
+            Text(text = "List - Option 1")
+        }
+        Row {
+            RadioButton(selected = name == "List - Option 2",  onClick = {onItemSelected("List - Option 2")})
+            Text(text = "List - Option 2")
+        }
+        Row {
+            RadioButton(selected = name == "List - Option 3",  onClick = {onItemSelected("List - Option 3")})
+            Text(text = "List - Option 3")
+        }
+        Row {
+            RadioButton(selected = name == "List - Option 4",  onClick = {onItemSelected("List - Option 4")})
+            Text(text =  "List - Option 4")
+        }
+    }
+}
+
+
+
+@Composable
+fun getOptions(titles: List<String>): List<CheckInfo> {
+    return titles.map {
+        var status by rememberSaveable { mutableStateOf(false) }
+        CheckInfo(
+            title = it,
+            selected = status,
+            onCheckedChange = { newStatus -> status = newStatus }
+        )
+    }
+}
+
+
+@Composable
+fun MySwich() {
+    var state by rememberSaveable { mutableStateOf(true) }
+    Switch(
+        checked = state,
+        onCheckedChange = { state = !state },
+        enabled = true,
+        colors = SwitchDefaults.colors(
+            checkedThumbColor = Color.Green, // Color del pulgar cuando está marcado
+            uncheckedThumbColor = Color.Red,  // Color del pulgar cuando no está marcado
+            checkedTrackColor = Color.Blue,  // Color de la pista cuando está marcado
+            uncheckedTrackColor = Color.Gray,  // Color de la pista cuando no está marcado
+
+
+        )
+    )
+}
+
+
+@Composable
+fun MyCheckBoxBasic() {
+    var state by rememberSaveable { mutableStateOf(true) }
+    Checkbox(
+        checked = state,
+        onCheckedChange = { state = !state },
+        enabled = true,
+        colors = CheckboxDefaults.colors(
+            checkedColor = Color.Red,
+            uncheckedColor = Color.Yellow,
+            checkmarkColor = Color.Green
+        )
+    )
+}
+
+
+@Composable
+fun MyCheckBoxWithText() {
+    var state by rememberSaveable { mutableStateOf(true) }
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(), // Opcional: Para que el Row ocupe todo el ancho disponible
+        verticalAlignment = Alignment.CenterVertically // Alinea verticalmente al centro
+    ) {
+        Checkbox(
+            checked = state,
+            onCheckedChange = { state = it }
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = "Texto 1")
+    }
+}
+
+
+@Composable
+fun MyTriStatusCheckBox() {
+    var status by rememberSaveable { mutableStateOf(ToggleableState.Off) }
+
+    // Función para obtener el texto basado en el estado del TriStateCheckbox
+    fun getStatusText(status: ToggleableState): String {
+        return when (status) {
+            ToggleableState.On -> "Checked"
+            ToggleableState.Off -> "Unchecked"
+            ToggleableState.Indeterminate -> "Indeterminate"
+        }
+    }
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(), // Opcional: para que el Row ocupe el ancho disponible
+        verticalAlignment = Alignment.CenterVertically // Alinea verticalmente el TriStateCheckbox con otros elementos
+    ) {
+        TriStateCheckbox(
+            state = status,
+            onClick = {
+                status = when (status) {
+                    ToggleableState.On -> ToggleableState.Off
+                    ToggleableState.Off -> ToggleableState.Indeterminate
+                    ToggleableState.Indeterminate -> ToggleableState.On
+                }
+            }
+        )
+        Spacer(modifier = Modifier.width(8.dp)) // Espacio entre el TriStateCheckbox y el siguiente elemento
+        Text(
+            text = getStatusText(status), // Cambia el texto basado en el estado
+            fontSize = 16.sp // Opcional: Cambia el tamaño de fuente del texto
+        )
+    }
+}
+
+@Composable
+fun MyRadioButton() {
+    Row(Modifier.fillMaxWidth()) {
+        RadioButton(
+            selected = true, onClick = { }, enabled = false, colors = RadioButtonDefaults.colors(
+                selectedColor = colorResource(id = R.color.teal_200),
+                unselectedColor = colorResource(id = R.color.teal_700),
+                disabledSelectedColor = colorResource(id = R.color.purple_500)
+            )
+        )
+        Text(text = "Radio Button Example")
+    }
+}
+
+
