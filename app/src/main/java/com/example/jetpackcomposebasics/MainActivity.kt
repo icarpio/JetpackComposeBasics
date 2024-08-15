@@ -20,6 +20,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -30,7 +31,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.jetpackcomposebasics.ui.theme.JetpackComposeBasicsTheme
 
 
@@ -49,7 +52,8 @@ class MainActivity : ComponentActivity() {
                     //var myTextParams by remember { mutableStateOf("") }
                     //MyTextWithParameters(myTextParams) { myTextParams = it }
                     val myOptions = getOptions(listOf("Option 1","Option 2","Option 3"))
-                    Column() {
+                    Column {
+                        MyTriStatusCheckBox()
                         myOptions.forEach{
                             MyCheckBoxWithTextCompleted(it)
                         }
@@ -139,6 +143,42 @@ fun MyCheckBoxWithTextCompleted(checkInfo: CheckInfo) {
         )
         Spacer(modifier = Modifier.width(8.dp)) // Espacio entre Checkbox y Text
         Text(text = checkInfo.title)
+    }
+}
+
+@Composable
+fun MyTriStatusCheckBox() {
+    var status by rememberSaveable { mutableStateOf(ToggleableState.Off) }
+
+    // Función para obtener el texto basado en el estado del TriStateCheckbox
+    fun getStatusText(status: ToggleableState): String {
+        return when (status) {
+            ToggleableState.On -> "Checked"
+            ToggleableState.Off -> "Unchecked"
+            ToggleableState.Indeterminate -> "Indeterminate"
+        }
+    }
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(), // Opcional: para que el Row ocupe el ancho disponible
+        verticalAlignment = Alignment.CenterVertically // Alinea verticalmente el TriStateCheckbox con otros elementos
+    ) {
+        TriStateCheckbox(
+            state = status,
+            onClick = {
+                status = when (status) {
+                    ToggleableState.On -> ToggleableState.Off
+                    ToggleableState.Off -> ToggleableState.Indeterminate
+                    ToggleableState.Indeterminate -> ToggleableState.On
+                }
+            }
+        )
+        Spacer(modifier = Modifier.width(8.dp)) // Espacio entre el TriStateCheckbox y el siguiente elemento
+        Text(
+            text = getStatusText(status), // Cambia el texto basado en el estado
+            fontSize = 16.sp // Opcional: Cambia el tamaño de fuente del texto
+        )
     }
 }
 
