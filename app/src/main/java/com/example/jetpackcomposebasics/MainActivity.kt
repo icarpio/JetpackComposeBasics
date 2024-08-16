@@ -19,10 +19,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             JetpackComposeBasicsTheme {
                 window.statusBarColor = MaterialTheme.colorScheme.primary.toArgb() // Cambiar el color de la barra de estado
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    MyCard()
+                Scaffold {
+                    RangeSliderExample()
                 }
             }
         }
