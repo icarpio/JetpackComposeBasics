@@ -488,22 +488,32 @@ fun MyProgressBarAd(){
 //MyRadioButtonList(selectRadioBut ton) { selectRadioButton = it }
 @Composable
 fun MyRadioButtonList(name:String, onItemSelected:(String)->Unit) {
-    Column(Modifier.fillMaxWidth().padding(9.dp)) {
-        Row {
-            RadioButton(selected = name == "List - Option 1", onClick = {onItemSelected("List - Option 1")})
-            Text(text = "List - Option 1")
-        }
-        Row {
-            RadioButton(selected = name == "List - Option 2",  onClick = {onItemSelected("List - Option 2")})
-            Text(text = "List - Option 2")
-        }
-        Row {
-            RadioButton(selected = name == "List - Option 3",  onClick = {onItemSelected("List - Option 3")})
-            Text(text = "List - Option 3")
-        }
-        Row {
-            RadioButton(selected = name == "List - Option 4",  onClick = {onItemSelected("List - Option 4")})
-            Text(text =  "List - Option 4")
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(9.dp)) {
+
+        // Crear una lista de opciones
+        val options = listOf(
+            "Option 1",
+            "Option 2",
+            "Option 3",
+            "Option 4"
+        )
+        // Iterar sobre las opciones para crear cada RadioButton y su texto
+        options.forEach { option ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically // Alineación vertical
+            ) {
+                RadioButton(
+                    selected = name == option,
+                    onClick = { onItemSelected(option) }
+                )
+                Spacer(modifier = Modifier.width(8.dp)) // Espaciado entre RadioButton y texto
+                Text(text = option)
+            }
         }
     }
 }
