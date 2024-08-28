@@ -141,6 +141,20 @@ fun AccountItem(email:String,@DrawableRes drawable: Int){
     }
 }
 
+
+/*
+                        var show by remember { mutableStateOf(false) }
+                        var selectedOption by remember { mutableStateOf("") }
+                        Button(onClick = {show = true}) {
+                            Text(text = "Mostrar Dialogo")
+                        }
+                        ConfirmationDialog(
+                            show = show,
+                            onDismiss = {show = false},
+                            onConfirm = { selected ->
+                                selectedOption = selected // Manejar el valor seleccionado
+                                show = false // Cerrar el diálogo
+                            })*/
 @Composable
 fun ConfirmationDialog(
     show: Boolean,

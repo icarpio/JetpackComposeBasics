@@ -34,6 +34,9 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center // Centra el contenido en la caja
                     ) {
+
+                        var show by remember { mutableStateOf(false) }
+                        var selectedOption by remember { mutableStateOf("") }
                         Button(onClick = {show = true}) {
                             Text(text = "Mostrar Dialogo")
                         }
@@ -45,6 +48,7 @@ class MainActivity : ComponentActivity() {
                                 show = false // Cerrar el diálogo
                             })
                     }
+                    SimpleRecyclerView()
                 }
             }
         }
